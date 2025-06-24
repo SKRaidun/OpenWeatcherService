@@ -11,7 +11,9 @@ import ru.OpenWeather.models.User;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Component
@@ -32,7 +34,7 @@ public class SessionDAO {
         sessions.setUser(user);
 
         LocalDateTime dateTime = LocalDateTime.now();
-        LocalDateTime newExpireTime = dateTime.plusMinutes(2);
+        LocalDateTime newExpireTime = dateTime.plusMinutes(30);
         Timestamp timestamp = Timestamp.valueOf(newExpireTime);
         sessions.setExpiresAt(timestamp);
 

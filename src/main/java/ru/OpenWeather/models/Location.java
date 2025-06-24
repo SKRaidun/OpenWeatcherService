@@ -2,6 +2,7 @@ package ru.OpenWeather.models;
 
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(name = "Locations")
 public class Location {
@@ -10,6 +11,10 @@ public class Location {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @Column(name = "name")
     private String name;
@@ -20,18 +25,21 @@ public class Location {
     @Column(name = "longitude")
     private double longitude;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @Column(name = "temperature")
+    private double temperature;
+    @Column(name = "feels_like")
+    private double feelsLike;
+    @Column(name = "description")
+    private String description;
+    @Column(name = "humidity")
+    private double humidity;
 
     public Location() {
     }
 
-    public Location(String name, double latitude, double longitude, User user) {
-        this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public Location(int id, User user, String name) {
         this.user = user;
+        this.name = name;
     }
 
     public int getId() {
@@ -40,6 +48,14 @@ public class Location {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getName() {
@@ -66,22 +82,36 @@ public class Location {
         this.longitude = longitude;
     }
 
-    public User getUser() {
-        return user;
+    public double getTemperature() {
+        return temperature;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
     }
 
-    @Override
-    public String toString() {
-        return "Location{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", user=" + user +
-                '}';
+    public double getFeelsLike() {
+        return feelsLike;
     }
+
+    public void setFeelsLike(double feelsLike) {
+        this.feelsLike = feelsLike;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(double humidity) {
+        this.humidity = humidity;
+    }
+
 }

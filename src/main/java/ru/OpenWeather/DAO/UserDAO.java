@@ -34,6 +34,22 @@ public class UserDAO {
     }
 
     @Transactional
+    public User findUserByID(int id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        String hql = "From User u WHERE u.id = :id";
+        TypedQuery<User> query = session.createQuery(hql, User.class);
+        query.setParameter("id", id);
+        List<User> users = query.getResultList();
+
+        if (!users.isEmpty()) {
+            System.out.println(users.get(0).getLocations());
+                return users.get(0);
+        }
+        return null;
+    }
+
+    @Transactional
     public User findUser(String userLogin, String password) {
         Session session = sessionFactory.getCurrentSession();
 

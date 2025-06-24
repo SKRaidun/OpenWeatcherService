@@ -135,9 +135,28 @@
     <version>3.1.3.RELEASE</version>
   </dependency>
 
+  <!-- Jackson DataBind
+
+  <!- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+  <dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.19.0</version>
+  </dependency>
+
 </dependencies>
 <build>
   <finalName>OpenWeatherService</finalName>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <configuration>
+        <source>16</source>
+        <target>16</target>
+      </configuration>
+    </plugin>
+  </plugins>
 </build>
 </project>
 

@@ -1,0 +1,56 @@
+package ru.OpenWeather.DAO;
+
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import ru.OpenWeather.models.Location;
+import ru.OpenWeather.models.Sessions;
+
+import java.util.List;
+import java.util.UUID;
+
+@Transactional
+@Component
+public class LocationDAO {
+    private final SessionFactory sessionFactory;
+
+
+    public LocationDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public void createLocation(Location location) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.persist(location);
+        } catch (ConstraintViolationException e) {}
+    }
+
+    public boolean findLocationByNameAndId(String name, int id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        String hql = "From Location l WHERE l.user.id = :id";
+        TypedQuery<Location> query = session.createQuery(hql, Location.class);
+        query.setParameter("id", id);
+        List<Location> locations = query.getResultList();
+        for (Location location : locations) {
+            if (location.getName().equals(name)) return true;
+        }
+        return false;
+    }
+
+    public List<Location> findLocationsByUserId(int id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        String hql = "From Location l WHERE l.user.id = :id";
+        TypedQuery<Location> query = session.createQuery(hql, Location.class);
+        query.setParameter("id", id);
+        List<Location> locations = query.getResultList();
+        return locations;
+    }
+}
