@@ -26,8 +26,21 @@ public class LocationDAO {
 
     public void createLocation(Location location) {
         Session session = sessionFactory.getCurrentSession();
+
+        Location existingLocation = findLocationByName(location.getName(), location.getUser().getId());
+
         try {
+        if (existingLocation != null) {
+            existingLocation.setLatitude(location.getLatitude());
+            existingLocation.setLongitude(location.getLongitude());
+            existingLocation.setTemperature(location.getTemperature());
+            existingLocation.setFeelsLike(location.getFeelsLike());
+            existingLocation.setDescription(location.getDescription());
+            existingLocation.setHumidity(location.getHumidity());
+            session.merge(existingLocation);
+        } else {
             session.persist(location);
+        }
         } catch (ConstraintViolationException e) {}
     }
 
@@ -42,6 +55,19 @@ public class LocationDAO {
             if (location.getName().equals(name)) return true;
         }
         return false;
+    }
+
+    public Location findLocationByName(String name, int id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        String hql = "From Location l WHERE l.user.id = :id";
+        TypedQuery<Location> query = session.createQuery(hql, Location.class);
+        query.setParameter("id", id);
+        List<Location> locations = query.getResultList();
+        for (Location location : locations) {
+            if (location.getName().equals(name)) return location;
+        }
+        return null;
     }
 
     public List<Location> findLocationsByUserId(int id) {

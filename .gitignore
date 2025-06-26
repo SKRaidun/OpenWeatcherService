@@ -47,4 +47,4 @@ conf
 logs
 
 ### Token ###
-src/main/resources/config.properties
+src/main/resources
