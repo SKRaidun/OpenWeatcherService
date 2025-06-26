@@ -27,6 +27,7 @@ import java.util.Properties;
 @Configuration
 @ComponentScan("ru.OpenWeather")
 @PropertySource("classpath:hibernate.properties")
+@PropertySource("classpath:config.properties")
 @EnableTransactionManagement
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {

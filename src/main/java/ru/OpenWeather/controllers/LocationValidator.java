@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.OpenWeather.models.Location;
 
@@ -18,6 +20,15 @@ import java.net.http.HttpResponse;
 
 @Component
 public class LocationValidator {
+
+    private final String apiToken;
+
+    @Autowired
+    public LocationValidator(@Value("${weather.api.token}") String apiToken) {
+        this.apiToken = apiToken;
+    }
+
+
     private Location parseAPIResponse(String response) {
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -25,6 +36,7 @@ public class LocationValidator {
         double convertionCoef = 273.15;
         try {
             JsonNode rootNode = objectMapper.readTree(response);
+            if (rootNode.get("cod").asText().equals("404")) return null;
             String name = rootNode.get("name").asText();
             double lon = rootNode.get("coord").get("lon").asDouble();
             double lat = rootNode.get("coord").get("lat").asDouble();
@@ -50,12 +62,11 @@ public class LocationValidator {
 
     public Location findLocationWithAPI(String location) throws IOException, InterruptedException {
 
-        String token = "2220db90b8f09a87b82dd2e77fd36b2f";
         String URL = "https://api.openweathermap.org/data/2.5/weather?q=";
         String fullURI = URL +
                 location +
                 "&appid=" +
-                token;
+                apiToken;
         URI uriObj = URI.create(fullURI);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uriObj)

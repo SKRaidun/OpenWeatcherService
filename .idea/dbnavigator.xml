@@ -24,21 +24,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="fcedc315-725e-411d-8a07-f53fa5c51e22">
-      <console name="Connection" type="STANDARD" schema="public" session="Main"><![CDATA[CREATE TABLE locations (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    name VARCHAR(255) UNIQUE,
-    latitude DOUBLE PRECISION,
-    longitude DOUBLE PRECISION,
-    temperature DOUBLE PRECISION,
-    feels_like DOUBLE PRECISION,
-    description VARCHAR(255),
-    humidity DOUBLE PRECISION,
-    CONSTRAINT fk_user
-        FOREIGN KEY (user_id)
-        REFERENCES users(id)
-        ON DELETE CASCADE
-);]]></console>
+      <console name="Connection" type="STANDARD" schema="public" session="Main"><![CDATA[SELECT * from locations;]]></console>
     </connection>
     <connection id="6e62e300-ab52-4eb9-8554-7f128a00f79c">
       <console name="Connection 1" type="STANDARD" schema="postgres" session="Main" />

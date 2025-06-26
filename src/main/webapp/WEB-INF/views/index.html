@@ -15,8 +15,8 @@
             Weather Tracker
         </a>
         <div class="d-flex align-items-center">
-            <span class="navbar-text me-3">ILoveJava</span>
-            <form th:action="@{/logout}" method="post">
+            <span class="navbar-text me-3" th:text="${username}">Username</span>
+            <form th:action="@{/weather-service/logout}" method="post">
                 <button class="btn btn-outline-danger">Sign out</button>
             </form>
         </div>
@@ -42,7 +42,7 @@
                     <div class="col-12 col-lg-3 col-md-6 mb-4" th:each="location : ${locations}">
                         <div class="card h-100 position-relative weather-card">
                             <div class="position-absolute weather-card-delete-form">
-                                <form th:action="@{/delete-location}" method="post">
+                                <form th:action="@{/weather-service/delete-location}" method="post">
                                     <input type="hidden" name="id" th:value="${location.id}" />
                                     <button class="btn-close" aria-label="Delete"></button>
                                 </form>

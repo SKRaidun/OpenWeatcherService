@@ -45,3 +45,6 @@ conf
 
 ### logs ###
 logs
+
+### Token ###
+src/main/resources/config.properties

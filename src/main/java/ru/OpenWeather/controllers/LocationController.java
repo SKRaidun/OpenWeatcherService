@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.OpenWeather.DAO.LocationDAO;
 import ru.OpenWeather.DAO.SessionDAO;
 import ru.OpenWeather.DAO.UserDAO;
@@ -70,13 +68,30 @@ public class LocationController {
         } catch (NullPointerException e) {}
 
         model.addAttribute("locations", locations);
+        model.addAttribute("username", user.getLogin());
         return "index";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        User user = sessionValidator.findUserBySession(request);
+        if (user != null && user.getSession() != null) {
+            sessionDAO.deleteSessionById(user.getSession());
+            user.setSession(null);
+        }
+        request.getSession().invalidate();
+        return "redirect:/login";
     }
 
 
     @PostMapping()
     private String addLocation(Model model, @ModelAttribute("location") String location, HttpServletRequest request) throws IOException, InterruptedException {
         Location newLocation = locationValidator.findLocationWithAPI(location);
+
+        if (newLocation == null) {
+            return "redirect:/login";
+        }
+
         User user = sessionValidator.findUserBySession(request);
         String locationName = newLocation.getName();
         int userID = user.getId();
@@ -85,5 +100,27 @@ public class LocationController {
         locationDAO.createLocation(newLocation);
 
         return "redirect:/login";
+    }
+
+
+
+    @PostMapping("/delete-location")
+    public String deleteLocationById(@RequestParam("id") int locationId,
+                                 HttpServletRequest request) {
+        if (!sessionValidator.hasValidSession(request)) {
+            return "redirect:/login";
+        }
+
+        User user = sessionValidator.findUserBySession(request);
+
+        boolean userOwnsLocation = locationDAO.findLocationsByUserId(user.getId())
+                .stream()
+                .anyMatch(loc -> loc.getId() == locationId);
+
+        if (userOwnsLocation) {
+            locationDAO.deleteLocationById(locationId);
+        }
+
+        return "redirect:/weather-service";
     }
 }

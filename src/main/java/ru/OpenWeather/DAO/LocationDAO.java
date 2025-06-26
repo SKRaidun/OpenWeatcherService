@@ -53,4 +53,14 @@ public class LocationDAO {
         List<Location> locations = query.getResultList();
         return locations;
     }
+
+    @Transactional
+    public void deleteLocationById(int locationId) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Location location = session.find(Location.class, locationId);
+        if (location != null) {
+            session.remove(location);
+        }
+    }
 }
