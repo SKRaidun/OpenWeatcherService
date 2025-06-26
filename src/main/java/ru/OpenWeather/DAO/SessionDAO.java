@@ -1,7 +1,7 @@
 package ru.OpenWeather.DAO;
 
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class SessionDAO {
         user.setSession(sessions);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Sessions findSessionByID(String ID) {
         Session session = sessionFactory.getCurrentSession();
 

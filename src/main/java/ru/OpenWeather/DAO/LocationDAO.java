@@ -1,7 +1,8 @@
 package ru.OpenWeather.DAO;
 
+import jakarta.persistence.Transient;
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
@@ -44,6 +45,7 @@ public class LocationDAO {
         } catch (ConstraintViolationException e) {}
     }
 
+    @Transactional(readOnly = true)
     public boolean findLocationByNameAndId(String name, int id) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -57,6 +59,7 @@ public class LocationDAO {
         return false;
     }
 
+    @Transactional(readOnly = true)
     public Location findLocationByName(String name, int id) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -70,6 +73,7 @@ public class LocationDAO {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public List<Location> findLocationsByUserId(int id) {
         Session session = sessionFactory.getCurrentSession();
 

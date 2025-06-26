@@ -1,7 +1,7 @@
 package ru.OpenWeather.DAO;
 
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
@@ -23,7 +23,7 @@ public class UserDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean findLogin(String login) {
         Session session = sessionFactory.getCurrentSession();
         String hql = "From User u WHERE u.login = :login";
@@ -33,7 +33,7 @@ public class UserDAO {
         return users.isEmpty();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public User findUserByID(int id) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -49,7 +49,7 @@ public class UserDAO {
         return null;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public User findUser(String userLogin, String password) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -74,7 +74,7 @@ public class UserDAO {
         } catch (ConstraintViolationException e) {}
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Sessions findSessionByID(User user) {
         Session session = sessionFactory.getCurrentSession();
 
