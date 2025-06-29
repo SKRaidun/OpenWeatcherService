@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import ru.OpenWeather.models.Sessions;
 import ru.OpenWeather.models.User;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Component
