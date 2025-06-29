@@ -1,19 +1,14 @@
 package ru.OpenWeather.DAO;
 
-import jakarta.persistence.Transient;
 import jakarta.persistence.TypedQuery;
 import org.springframework.transaction.annotation.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.OpenWeather.models.Location;
-import ru.OpenWeather.models.Sessions;
 
 import java.util.List;
-import java.util.UUID;
 
 @Transactional
 @Component
